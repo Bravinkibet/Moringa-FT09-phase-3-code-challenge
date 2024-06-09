@@ -8,56 +8,78 @@ def main():
     # Initialize the database and create tables
     create_tables()
 
-    # Collect user input
-    author_name = input("Enter author's name: ")
-    magazine_name = input("Enter magazine name: ")
-    magazine_category = input("Enter magazine category: ")
-    article_title = input("Enter article title: ")
-    article_content = input("Enter article content: ")
+    while True:
+        print("Choose an option:")
+        print("1. Add an author, magazine, and article")
+        print("2. Delete a magazine")
+        print("3. View all data")
+        print("4. Exit")
 
-    # Connect to the database
-    conn = get_db_connection()
-    cursor = conn.cursor()
+        choice = input("Enter choice: ")
 
-    # Create an author
-    cursor.execute('INSERT INTO authors (name) VALUES (?)', (author_name,))
-    author_id = cursor.lastrowid # Use this to fetch the id of the newly created author
+        if choice == "1":
+            # Collect user input
+            author_name = input("Enter author's name: ")
+            magazine_name = input("Enter magazine name: ")
+            magazine_category = input("Enter magazine category: ")
+            article_title = input("Enter article title: ")
+            article_content = input("Enter article content: ")
 
-    # Create a magazine
-    cursor.execute('INSERT INTO magazines (name, category) VALUES (?,?)', (magazine_name, magazine_category))
-    magazine_id = cursor.lastrowid # Use this to fetch the id of the newly created magazine
+            # Connect to the database
+            conn = get_db_connection()
+            cursor = conn.cursor()
 
-    # Create an article
-    cursor.execute('INSERT INTO articles (title, content, author_id, magazine_id) VALUES (?, ?, ?, ?)',
-                   (article_title, article_content, author_id, magazine_id))
+            # Create an author
+            cursor.execute('INSERT INTO authors (name) VALUES (?)', (author_name,))
+            author_id = cursor.lastrowid  # Use this to fetch the id of the newly created author
 
-    conn.commit()
+            # Create a magazine
+            cursor.execute('INSERT INTO magazines (name, category) VALUES (?,?)', (magazine_name, magazine_category))
+            magazine_id = cursor.lastrowid  # Use this to fetch the id of the newly created magazine
 
-    # Fetch inserted records for verification
-    cursor.execute('SELECT * FROM magazines')
-    magazines = cursor.fetchall()
+            # Create an article
+            cursor.execute('INSERT INTO articles (title, content, author_id, magazine_id) VALUES (?, ?, ?, ?)',
+                           (article_title, article_content, author_id, magazine_id))
 
-    cursor.execute('SELECT * FROM authors')
-    authors = cursor.fetchall()
+            conn.commit()
+            conn.close()
 
-    cursor.execute('SELECT * FROM articles')
-    articles = cursor.fetchall()
+        elif choice == "2":
+            # Delete a magazine
+            magazine_id = int(input("Enter the ID of the magazine to delete: "))
+            Magazine.delete_magazine(magazine_id)
 
+        elif choice == "3":
+            # Connect to the database
+            conn = get_db_connection()
+            cursor = conn.cursor()
 
-    conn.close()
+            cursor.execute('SELECT * FROM magazines')
+            magazines = cursor.fetchall()
 
-    # Display results
-    print("\nMagazines:")
-    for magazine in magazines:
-        print(Magazine(magazine["id"], magazine["name"], magazine["category"]))
+            cursor.execute('SELECT * FROM authors')
+            authors = cursor.fetchall()
 
-    print("\nAuthors:")
-    for author in authors:
-        print(Author(author["id"], author["name"]))
+            cursor.execute('SELECT * FROM articles')
+            articles = cursor.fetchall()
 
-    print("\nArticles:")
-    for article in articles:
-        print(Article(article["id"], article["title"], article["content"], article["author_id"], article["magazine_id"]))
+            conn.close()
+
+            # Display results
+            print("\nMagazines:")
+            for magazine in magazines:
+                print(Magazine(magazine["id"], magazine["name"], magazine["category"]))
+
+            print("\nAuthors:")
+            for author in authors:
+                print(Author(author["id"], author["name"]))
+
+            print("\nArticles:")
+            for article in articles:
+                print(Article(article["id"], article["title"], article["content"], article["author_id"], article["magazine_id"]))
+
+        elif choice == "4":
+            break
 
 if __name__ == "__main__":
     main()
