@@ -19,11 +19,6 @@ def main():
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    '''
-        The following is just for testing purposes, 
-        you can modify it to meet the requirements of your implementation.
-    '''
-
     # Create an author
     cursor.execute('INSERT INTO authors (name) VALUES (?)', (author_name,))
     author_id = cursor.lastrowid # Use this to fetch the id of the newly created author
@@ -38,9 +33,7 @@ def main():
 
     conn.commit()
 
-    # Query the database for inserted records. 
-    # The following fetch functionality should probably be in their respective models
-
+    # Fetch inserted records for verification
     cursor.execute('SELECT * FROM magazines')
     magazines = cursor.fetchall()
 

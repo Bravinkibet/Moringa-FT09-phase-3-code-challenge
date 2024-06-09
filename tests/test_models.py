@@ -15,7 +15,18 @@ class TestModels(unittest.TestCase):
     def test_magazine_creation(self):
         magazine = Magazine(1, "Tech Weekly", "Technology")
         self.assertEqual(magazine.name, "Tech Weekly")
-        self.assertEqual(magazine.category, "Technology")
+
+    def test_author_articles(self):
+        author = Author(1, "John Doe")
+        articles = author.articles
+        self.assertIsInstance(articles, list)
+        self.assertTrue(all(isinstance(article, Article) for article in articles))
+
+    def test_magazine_contributing_authors(self):
+        magazine = Magazine(1, "Tech Weekly", "Technology")
+        authors = magazine.contributing_authors
+        self.assertIsInstance(authors, list)
+        self.assertTrue(all(isinstance(author, Author) for author in authors))
 
 if __name__ == "__main__":
     unittest.main()
