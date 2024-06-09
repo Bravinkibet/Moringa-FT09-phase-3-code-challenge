@@ -43,6 +43,7 @@ def main():
     cursor.execute('SELECT * FROM articles')
     articles = cursor.fetchall()
 
+
     conn.close()
 
     # Display results
