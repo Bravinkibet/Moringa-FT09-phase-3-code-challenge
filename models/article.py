@@ -13,7 +13,7 @@ class Article:
 
     @property
     def author(self):
-        from models.author import Author  # Local import to avoid circular dependency
+        from models.author import Author
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM authors WHERE id = ?', (self.author_id,))
@@ -25,7 +25,7 @@ class Article:
 
     @property
     def magazine(self):
-        from models.magazine import Magazine  # Local import to avoid circular dependency
+        from models.magazine import Magazine
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM magazines WHERE id = ?', (self.magazine_id,))
